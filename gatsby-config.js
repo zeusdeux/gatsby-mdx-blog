@@ -18,6 +18,7 @@ module.exports = {
       }
     },
     {
+      // setup this plugin to read and work with images
       resolve: 'gatsby-mdx'
     },
     'gatsby-transformer-sharp',
