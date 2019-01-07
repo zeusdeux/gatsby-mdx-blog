@@ -18,10 +18,16 @@ const IndexPage = ({ data }) => (
       {data.allMdx.edges.map(({ node }, i) => {
         const {
           fields: { slug },
-          frontmatter: { title }
+          frontmatter: { title, image }
         } = node
+        const {
+          childImageSharp: {
+            resize: { src: publicURL }
+          }
+        } = image
         return (
           <li key={i}>
+            <img src={publicURL} alt="image" />
             <Link to={slug}>{title}</Link>
           </li>
         )
@@ -47,6 +53,13 @@ export const query = graphql`
           }
           frontmatter {
             title
+            image {
+              childImageSharp {
+                resize(width: 200) {
+                  src
+                }
+              }
+            }
           }
         }
       }

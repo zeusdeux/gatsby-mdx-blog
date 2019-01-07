@@ -1,4 +1,3 @@
-const componentWithMDXScope = require('gatsby-mdx/component-with-mdx-scope')
 const path = require('path')
 
 exports.onCreateNode = ({ node, getNode, actions: { createNodeField } }) => {

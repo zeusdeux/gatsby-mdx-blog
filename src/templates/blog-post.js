@@ -9,7 +9,6 @@ import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 function PostPageTemplate({ data: { mdx } }) {
   return (
     <article>
-      <img src={mdx.frontmatter.image.relativePath} />
       <MDXRenderer>{mdx.code.body}</MDXRenderer>
     </article>
   )
@@ -24,11 +23,6 @@ export const pageQuery = graphql`
   query($id: String!) {
     mdx(id: { eq: $id }) {
       id
-      frontmatter {
-        image {
-          relativePath
-        }
-      }
       code {
         body
       }

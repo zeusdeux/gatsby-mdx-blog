@@ -19,7 +19,26 @@ module.exports = {
     },
     {
       // setup this plugin to read and work with images
-      resolve: 'gatsby-mdx'
+      resolve: 'gatsby-mdx',
+      options: {
+        gatsbyRemarkPlugins: [
+          {
+            resolve: 'gatsby-remark-images',
+            options: {
+              maxWidth: 590,
+              sizeByPixelDensity: true
+            }
+          },
+          {
+            resolve: 'gatsby-remark-responsive-iframe',
+            options: {
+              wrapperStyle: 'margin-bottom: 1.0725rem'
+            }
+          },
+          { resolve: 'gatsby-remark-copy-linked-files' },
+          { resolve: 'gatsby-remark-smartypants' }
+        ]
+      }
     },
     'gatsby-transformer-sharp',
     'gatsby-plugin-sharp',
