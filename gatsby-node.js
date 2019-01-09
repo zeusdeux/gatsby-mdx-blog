@@ -1,17 +1,5 @@
 const path = require('path')
 
-exports.onCreateNode = ({ node, getNode, actions: { createNodeField } }) => {
-  if (node.internal.type === `Mdx`) {
-    const fileNode = getNode(node.parent)
-    const slug = path.relative('content/blog', fileNode.dir)
-    createNodeField({
-      node,
-      name: `slug`,
-      value: `/${slug}`
-    })
-  }
-}
-
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
   return new Promise((resolve, reject) => {
@@ -23,10 +11,8 @@ exports.createPages = ({ graphql, actions }) => {
               edges {
                 node {
                   id
-                  fields {
-                    slug
-                  }
                   frontmatter {
+                    slug
                     title
                     date
                     author
@@ -45,13 +31,14 @@ exports.createPages = ({ graphql, actions }) => {
           reject(result.errors)
         }
 
+        // eslint-disable-next-line
         console.log(result)
         const posts = result.data.allMdx.edges
 
         // Create blog posts pages.
         posts.forEach(({ node }) => {
           const {
-            fields: { slug }
+            frontmatter: { slug }
           } = node
           createPage({
             path: slug,

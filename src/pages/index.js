@@ -14,31 +14,33 @@ const IndexPage = ({ data }) => (
     <p>
       Total posts: <b>{data.allMdx.totalCount}</b>{' '}
     </p>
-    <ul>
-      {data.allMdx.edges.map(({ node }, i) => {
-        const {
-          fields: { slug },
-          frontmatter: { title, image }
-        } = node
-        const {
-          childImageSharp: {
-            resize: { src: publicURL }
-          }
-        } = image
-        return (
-          <li key={i}>
-            <img src={publicURL} alt="image" />
-            <Link to={slug}>{title}</Link>
-          </li>
-        )
-      })}
-    </ul>
     <div>
       <p>Tags:</p>
       <ul>
         {data.allMdx.group.reduce(
           ({ fieldValue: acc }, { fieldValue: tagName }) => `${acc}, ${tagName}`
         )}
+      </ul>
+    </div>
+    <div>
+      <p>Posts:</p>
+      <ul>
+        {data.allMdx.edges.map(({ node }, i) => {
+          const {
+            frontmatter: { title, image, slug }
+          } = node
+          const {
+            childImageSharp: {
+              resize: { src: publicURL }
+            }
+          } = image
+          return (
+            <li key={i}>
+              <img src={publicURL} alt="image" />
+              <Link to={slug}>{title}</Link>
+            </li>
+          )
+        })}
       </ul>
     </div>
   </Layout>
@@ -59,10 +61,9 @@ export const query = graphql`
       }
       edges {
         node {
-          fields {
-            slug
-          }
           frontmatter {
+            slug
+            tags
             title
             image {
               childImageSharp {
