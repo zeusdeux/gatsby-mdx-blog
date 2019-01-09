@@ -17,9 +17,7 @@ const IndexPage = ({ data }) => (
     <div>
       <p>Tags:</p>
       <ul>
-        {data.allMdx.group.reduce(
-          ({ fieldValue: acc }, { fieldValue: tagName }) => `${acc}, ${tagName}`
-        )}
+        {data.allMdx.group.reduce((acc, { fieldValue: tagName }) => `${acc}, ${tagName}`, '')}
       </ul>
     </div>
     <div>
@@ -62,8 +60,8 @@ export const query = graphql`
       edges {
         node {
           frontmatter {
-            slug
             tags
+            slug
             title
             image {
               childImageSharp {

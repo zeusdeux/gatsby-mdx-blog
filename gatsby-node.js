@@ -2,7 +2,7 @@ const path = require('path')
 
 exports.createPages = ({ graphql, actions }) => {
   const { createPage } = actions
-  return new Promise((resolve, reject) => {
+  const postsPromise = new Promise((resolve, reject) => {
     resolve(
       graphql(
         `
@@ -49,4 +49,30 @@ exports.createPages = ({ graphql, actions }) => {
       })
     )
   })
+  const byTagsPromise = graphql(`
+    {
+      allMdx {
+        group(field: frontmatter___tags) {
+          fieldValue
+        }
+      }
+    }
+  `).then(result => {
+    if (result.errors) {
+      // eslint-disable-next-line
+      console.log(result.errors)
+      throw result.errors
+    }
+
+    const tags = result.data.allMdx.group
+    tags.forEach(({ fieldValue: tag }) => {
+      createPage({
+        path: `/tags/${tag.replace(/\s+/g, '-')}`,
+        component: path.resolve('./src/templates/by-tag.js'),
+        context: { tag }
+      })
+    })
+  })
+
+  return Promise.all([postsPromise, byTagsPromise])
 }
