@@ -33,6 +33,14 @@ const IndexPage = ({ data }) => (
         )
       })}
     </ul>
+    <div>
+      <p>Tags:</p>
+      <ul>
+        {data.allMdx.group.reduce(
+          ({ fieldValue: acc }, { fieldValue: tagName }) => `${acc}, ${tagName}`
+        )}
+      </ul>
+    </div>
   </Layout>
 )
 
@@ -46,6 +54,9 @@ export const query = graphql`
   query {
     allMdx {
       totalCount
+      group(field: frontmatter___tags) {
+        fieldValue
+      }
       edges {
         node {
           fields {
