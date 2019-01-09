@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { graphql } from 'gatsby'
+import { graphql, Link } from 'gatsby'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 import { withMDXScope } from 'gatsby-mdx/context'
 
@@ -9,7 +9,13 @@ import Layout from '../components/layout'
 import Video from '../components/video'
 
 function PostPageTemplate({ data: { mdx } }) {
-  return <MDXRenderer scope={{ Layout, Video }}>{mdx.code.body}</MDXRenderer>
+  return (
+    <article>
+      <p>{mdx.frontmatter.tags.join(', ')}</p>
+      <Link to="/">Home</Link>
+      <MDXRenderer scope={{ Layout, Video }}>{mdx.code.body}</MDXRenderer>
+    </article>
+  )
 }
 
 PostPageTemplate.propTypes = {
@@ -21,6 +27,9 @@ export const pageQuery = graphql`
   query($id: String!) {
     mdx(id: { eq: $id }) {
       id
+      frontmatter {
+        tags
+      }
       code {
         body
       }
