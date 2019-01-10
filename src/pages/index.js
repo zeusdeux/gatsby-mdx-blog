@@ -6,6 +6,8 @@ import { Link, graphql } from 'gatsby'
 import Layout from '../components/layout'
 import SEO from '../components/seo'
 
+import style from './index.module.css'
+
 const IndexPage = ({ data }) => (
   <Layout>
     <SEO title="Home" keywords={['gatsby', 'application', 'react', 'blog', 'mdx']} />
@@ -17,7 +19,11 @@ const IndexPage = ({ data }) => (
     <div>
       <p>Tags:</p>
       <ul>
-        {data.allMdx.group.reduce((acc, { fieldValue: tagName }) => `${acc}, ${tagName}`, '')}
+        {data.allMdx.group.map(({ fieldValue: tag }, i) => (
+          <Link key={i} className={style.tag} to={`/tags/${tag.trim().replace(/\s+/g, '-')}`}>
+            {tag}{' '}
+          </Link>
+        ))}
       </ul>
     </div>
     <div>

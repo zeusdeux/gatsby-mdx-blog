@@ -67,7 +67,7 @@ exports.createPages = ({ graphql, actions }) => {
     const tags = result.data.allMdx.group
     tags.forEach(({ fieldValue: tag }) => {
       createPage({
-        path: `/tags/${tag.replace(/\s+/g, '-')}`,
+        path: `/tags/${tag.trim().replace(/\s+/g, '-')}`,
         component: path.resolve('./src/templates/by-tag.js'),
         context: { tag }
       })
