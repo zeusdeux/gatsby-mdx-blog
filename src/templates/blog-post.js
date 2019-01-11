@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { graphql, Link } from 'gatsby'
+import { OutboundLink } from 'gatsby-plugin-google-analytics'
 import MDXRenderer from 'gatsby-mdx/mdx-renderer'
 import { withMDXScope } from 'gatsby-mdx/context'
 
@@ -13,7 +14,7 @@ function PostPageTemplate({ data: { mdx } }) {
     <article>
       <p>{mdx.frontmatter.tags.join(', ')}</p>
       <Link to="/">Home</Link>
-      <MDXRenderer scope={{ Layout, Video }}>{mdx.code.body}</MDXRenderer>
+      <MDXRenderer scope={{ Layout, Video, OutboundLink }}>{mdx.code.body}</MDXRenderer>
     </article>
   )
 }
