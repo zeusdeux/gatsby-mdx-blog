@@ -7,7 +7,12 @@ exports.createPages = ({ graphql, actions }) => {
       graphql(
         `
           {
-            allMdx {
+            site {
+              siteMetadata {
+                postsPerPage
+              }
+            }
+            allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
               edges {
                 node {
                   id
@@ -31,24 +36,43 @@ exports.createPages = ({ graphql, actions }) => {
           reject(result.errors)
         }
 
-        // eslint-disable-next-line
-        console.log(result)
         const posts = result.data.allMdx.edges
+        // eslint-disable-next-line
+        console.log(posts)
+
+        // Create paginated blog index page
+        const postsPerPage = result.data.site.siteMetadata.postsPerPage
+        const numPages = Math.ceil(posts.length / postsPerPage)
+
+        Array.from({ length: numPages }).forEach((_, i) => {
+          createPage({
+            path: i === 0 ? `/` : `/blog/${i + 1}`,
+            component: path.resolve('./src/templates/blog-index.js'),
+            context: {
+              limit: postsPerPage,
+              skip: i * postsPerPage
+            }
+          })
+        })
 
         // Create blog posts pages.
-        posts.forEach(({ node }) => {
+        posts.forEach(({ node }, index) => {
+          const previous = index === posts.length - 1 ? null : posts[index + 1].node
+          const next = index === 0 ? null : posts[index - 1].node
+
           const {
             frontmatter: { slug }
           } = node
           createPage({
             path: slug,
             component: path.resolve('./src/templates/blog-post.js'),
-            context: { id: node.id }
+            context: { id: node.id, next, previous }
           })
         })
       })
     )
   })
+
   const byTagsPromise = graphql(`
     {
       allMdx {

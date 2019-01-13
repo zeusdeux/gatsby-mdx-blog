@@ -6,7 +6,8 @@ module.exports = {
     siteUrl: 'https://blog.mudit.xyz',
     social: {
       twitter: 'muditameta'
-    }
+    },
+    postsPerPage: 2
   },
   plugins: [
     'gatsby-plugin-react-helmet',
